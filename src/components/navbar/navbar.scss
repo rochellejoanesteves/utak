@@ -1,0 +1,29 @@
+.navbar {
+    background:#09b596;
+    padding: 20px;
+    color: #ffff;
+    nav {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    a.brand {
+      margin-right: auto;
+      color: #ffff;
+      text-decoration: none;
+    }
+  
+    a:last-child {
+      color: #ffff;
+      text-decoration: none;
+      margin-left: 40px;
+      padding: 8px;
+      border: 1px solid #ffff;
+      border-radius: 4px;
+      &:hover {
+        background: #ffff;
+        color: #333;
+      }
+    }
+  }
