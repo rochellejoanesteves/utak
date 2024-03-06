@@ -6,7 +6,13 @@
   width: 40%;
   height: auto;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
+  .delete-icon {
+    margin-left: auto;
+    font-size: 32px;
+  }
   & h2 {
     margin: 0;
   }

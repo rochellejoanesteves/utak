@@ -1,9 +1,22 @@
 import React from "react";
 import "./menuItem.scss";
+import app from "../../firebaseConfig";
+import { getDatabase, ref, remove } from "firebase/database";
+import { CiCircleRemove } from "react-icons/ci";
 
 function MenuItem({ item }) {
+  const handleDelete = async (id) => {
+    const db = getDatabase(app);
+    const dbRef = ref(db, "menu/" + id);
+    await remove(dbRef);
+    window.location.reload();
+  };
   return (
     <div className="card-item">
+      <CiCircleRemove
+        onClick={() => handleDelete(item.id)}
+        className="delete-icon"
+      />
       <div>
         <h2>Name: {item.name}</h2>
         <h3>Category: {item.category}</h3>
