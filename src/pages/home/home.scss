@@ -1,5 +1,18 @@
 .home {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  input {
+    margin-top: 20px;
+    width: 30%;
+    text-align: center;
+  }
+  .cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+  }
 }

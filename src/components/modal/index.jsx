@@ -1,26 +1,26 @@
-import React, {useState} from "react";
-import app from "../../firebaseConfig"
+import React, { useState } from "react";
+import app from "../../firebaseConfig";
 import { getDatabase, ref, set } from "firebase/database";
 import { Box, Modal } from "@mui/material";
 
-function ModalComponent({showModal, setShowModal, item}) {
-  const [formData, setFormData] = useState({...item});
+function ModalComponent({ showModal, setShowModal, item }) {
+  const [formData, setFormData] = useState({ ...item });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // TODO: 
     const db = getDatabase(app);
     const dbRef = ref(db, "menu/" + item.id);
     set(dbRef, {
-        ...formData
-    }).then(() => {
-        alert("Updated")
-        setShowModal(false)
-    }).catch((error) => {
-        alert(error.message)
+      ...formData,
     })
+      .then(() => {
+        alert("Updated");
+        setShowModal(false);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
     window.location.reload();
-
   };
 
   const handleChange = (event) => {
@@ -51,131 +51,142 @@ function ModalComponent({showModal, setShowModal, item}) {
     setFormData({ ...formData, options: newOptions });
   };
 
-
   const handleClose = () => {
-    setShowModal(false)
-  }
+    setShowModal(false);
+  };
   return (
-    <div>
-      <Modal
-        open={showModal}
-        onClose={handleClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
+    <Modal
+      open={showModal}
+      onClose={handleClose}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Box
+        px={{
+          background: "white",
+          height: "50%",
+          width: "50%",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          overflowY: "auto",
+        }}
       >
-        <Box px={{background: "white", height: "50%", width: "50%", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", overflowY: "auto" }}>
-        <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="category">Category:</label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {!!!formData?.options ? (
+        <form onSubmit={handleSubmit} style={{ height: "100%"}}>
           <div>
-            <div>
-              <label htmlFor="price">Price ($):</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="cost">Cost ($):</label>
-              <input
-                type="number"
-                id="cost"
-                name="cost"
-                value={formData.cost}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="stock">Stock:</label>
-              <input
-                type="number"
-                id="stock"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <label htmlFor="category">Category:</label>
+            <input
+              type="text"
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            />
           </div>
-        ) : null}
-        {!!formData.options && (
           <div>
-            <label>Options:</label>
-            {formData.options?.map((option, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  placeholder="Size"
-                  name="size"
-                  value={option.size}
-                  onChange={(e) => handleOptionChange(index, e)}
-                  required
-                />
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {!!!formData?.options ? (
+            <div>
+              <div>
+                <label htmlFor="price">Price ($):</label>
                 <input
                   type="number"
-                  placeholder="Price"
+                  id="price"
                   name="price"
-                  value={option.price}
-                  onChange={(e) => handleOptionChange(index, e)}
+                  value={formData.price}
+                  onChange={handleChange}
                   required
                 />
-                <input
-                  type="number"
-                  placeholder="Cost"
-                  name="cost"
-                  value={option.cost}
-                  onChange={(e) => handleOptionChange(index, e)}
-                  required
-                />
-                <input
-                  type="number"
-                  placeholder="Stock"
-                  name="stock"
-                  value={option.stock}
-                  onChange={(e) => handleOptionChange(index, e)}
-                  required
-                />
-                <button type="button" onClick={() => handleRemoveOption(index)}>
-                  Remove
-                </button>
               </div>
-            ))}
-            <button type="button" onClick={handleAddOption}>
-              Add Option
-            </button>
-          </div>
-        )}
-        <button type="submit">Update Item</button>
-      </form>
-        </Box>
-      </Modal>
-    </div>
+              <div>
+                <label htmlFor="cost">Cost ($):</label>
+                <input
+                  type="number"
+                  id="cost"
+                  name="cost"
+                  value={formData.cost}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="stock">Stock:</label>
+                <input
+                  type="number"
+                  id="stock"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          ) : null}
+          {!!formData.options && (
+            <div>
+              <label>Options:</label>
+              {formData.options?.map((option, index) => (
+                <div key={index}>
+                  <input
+                    type="text"
+                    placeholder="Size"
+                    name="size"
+                    value={option.size}
+                    onChange={(e) => handleOptionChange(index, e)}
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Price"
+                    name="price"
+                    value={option.price}
+                    onChange={(e) => handleOptionChange(index, e)}
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Cost"
+                    name="cost"
+                    value={option.cost}
+                    onChange={(e) => handleOptionChange(index, e)}
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Stock"
+                    name="stock"
+                    value={option.stock}
+                    onChange={(e) => handleOptionChange(index, e)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveOption(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={handleAddOption}>
+                Add Option
+              </button>
+            </div>
+          )}
+          <button type="submit">Update Item</button>
+        </form>
+      </Box>
+    </Modal>
   );
 }
 
