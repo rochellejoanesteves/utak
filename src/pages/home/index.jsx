@@ -24,8 +24,8 @@ function Home() {
 
   return (
     <div className="home">
-      {menu.map((item) => (
-        <MenuItem key={item.id} item={item} />
+      {menu.map((item, index) => (
+        <MenuItem key={item.id || index} item={item} />
       ))}
     </div>
   );

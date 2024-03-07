@@ -21,7 +21,7 @@ function MenuItem({ item }) {
         <h2>Name: {item.name}</h2>
         <h3>Category: {item.category}</h3>
         <table>
-          {item.options?.length > 0 ? (
+          {!!item?.options ? (
             <thead>
               <tr>
                 <th>Size</th>
