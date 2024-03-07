@@ -3,8 +3,11 @@ import app from "../../firebaseConfig";
 import { getDatabase, ref, set, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import "./create.scss";
+import { useNavigate } from "react-router-dom";
 
 function Create() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -36,10 +39,10 @@ function Create() {
     }
     const db = getDatabase(app);
     const newDocRef = push(ref(db, "menu"));
-    const newItem = { ...filteredData, id: uuidv4() };
-    set(newDocRef, newItem)
+    set(newDocRef, filteredData)
       .then(() => {
         alert("data saved successfully");
+        navigate("/")
       })
       .catch((error) => {
         alert("error: ", error.message);
