@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./menuItem.scss";
 import app from "../../firebaseConfig";
 import { getDatabase, ref, remove } from "firebase/database";
-import { CiCircleRemove } from "react-icons/ci";
+import { CiCircleRemove, CiEdit } from "react-icons/ci";
 import ModalComponent from "../modal";
 
 function MenuItem({ item }) {
@@ -16,15 +16,15 @@ function MenuItem({ item }) {
   };
   return (
     <div className="card-item">
-      <CiCircleRemove
-        onClick={() => handleDelete(item.id)}
-        className="delete-icon"
-      />
+      <div className="icons">
+        <CiEdit onClick={() => setShowModal(true)} />
+        <CiCircleRemove onClick={() => handleDelete(item.id)} />
+      </div>
       <div>
         <h2>Name: {item.name}</h2>
         <h3>Category: {item.category}</h3>
-          {!!item?.options ? (
-        <table>
+        {!!item?.options ? (
+          <table>
             <thead>
               <tr>
                 <th>Size</th>
@@ -34,25 +34,23 @@ function MenuItem({ item }) {
               </tr>
             </thead>
             <tbody>
-            {item.options?.map((option, index) => (
-              <tr key={index}>
-                <td>{option.size}</td>
-                <td>${option.price}</td>
-                <td>${option.cost}</td>
-                <td>{option.stock}</td>
-              </tr>
-            ))}
+              {item.options?.map((option, index) => (
+                <tr key={index}>
+                  <td>{option.size}</td>
+                  <td>${option.price}</td>
+                  <td>${option.cost}</td>
+                  <td>{option.stock}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
-          ) : (
-            <div>
-              <p>Price: ${item.price}</p>
-              <p>Cost: ${item.cost}</p>
-              <p>Stock: {item.stock}</p>
-            </div>
-          )}
-    
-        <button onClick={() => setShowModal(true)}>Update</button>
+        ) : (
+          <div>
+            <p>Price: ${item.price}</p>
+            <p>Cost: ${item.cost}</p>
+            <p>Stock: {item.stock}</p>
+          </div>
+        )}
 
         {showModal && (
           <ModalComponent

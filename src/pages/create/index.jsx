@@ -10,6 +10,7 @@ function Create() {
   const [formData, setFormData] = useState({
     id: "",
     name: "",
+    category: "",
     price: "",
     cost: "",
     stock: "",
@@ -25,6 +26,7 @@ function Create() {
     if (enableOptions) {
       filteredData = {
         name: formData.name,
+        category: formData.category,
         options: formData.options,
       };
     } else {
@@ -163,10 +165,10 @@ function Create() {
           />
         </div>
         {enableOptions && (
-          <div>
-            <label>Options:</label>
+          <div style={{display: "flex", justifyContent: 'center', alignItems: "center", flexDirection: "column"}}>
+            {/* <label>Options:</label> */}
             {formData.options.map((option, index) => (
-              <div key={index}>
+              <div key={index} className="options-form" style={{display: "flex"}}>
                 <input
                   type="text"
                   placeholder="Size"
@@ -205,11 +207,11 @@ function Create() {
               </div>
             ))}
             <button type="button" onClick={handleAddOption}>
-              Add Option
+              Add Options
             </button>
           </div>
         )}
-        <button type="submit">Add Item</button>
+        <button type="submit" style={{marginRight: "0"}}>Add Item</button>
       </form>
     </div>
   );
