@@ -41,12 +41,14 @@ function Home() {
   };
   return (
     <div className="home">
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
+      {!!!message && (
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      )}
       <div className="cards">
         <di>
           <h2 className="error">{message}</h2>
