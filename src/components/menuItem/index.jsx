@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./menuItem.scss";
 import app from "../../firebaseConfig";
 import { getDatabase, ref, remove } from "firebase/database";
 import { CiCircleRemove } from "react-icons/ci";
+import ModalComponent from "../modal";
 
 function MenuItem({ item }) {
+  const [showModal, setShowModal] = useState(false);
+
   const handleDelete = async (id) => {
     const db = getDatabase(app);
     const dbRef = ref(db, "menu/" + id);
@@ -20,8 +23,8 @@ function MenuItem({ item }) {
       <div>
         <h2>Name: {item.name}</h2>
         <h3>Category: {item.category}</h3>
-        <table>
           {!!item?.options ? (
+        <table>
             <thead>
               <tr>
                 <th>Size</th>
@@ -30,14 +33,7 @@ function MenuItem({ item }) {
                 <th>Stock</th>
               </tr>
             </thead>
-          ) : (
-            <div>
-              <p>Price: ${item.price}</p>
-              <p>Cost: ${item.cost}</p>
-              <p>Stock: {item.stock}</p>
-            </div>
-          )}
-          <tbody>
+            <tbody>
             {item.options?.map((option, index) => (
               <tr key={index}>
                 <td>{option.size}</td>
@@ -46,8 +42,25 @@ function MenuItem({ item }) {
                 <td>{option.stock}</td>
               </tr>
             ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+          ) : (
+            <div>
+              <p>Price: ${item.price}</p>
+              <p>Cost: ${item.cost}</p>
+              <p>Stock: {item.stock}</p>
+            </div>
+          )}
+    
+        <button onClick={() => setShowModal(true)}>Update</button>
+
+        {showModal && (
+          <ModalComponent
+            showModal={showModal}
+            setShowModal={setShowModal}
+            item={item}
+          />
+        )}
       </div>
     </div>
   );

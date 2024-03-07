@@ -1,61 +1,26 @@
-import React, { useState } from "react";
-import app from "../../firebaseConfig";
-import { getDatabase, ref, set, push } from "firebase/database";
-import "./create.scss";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import app from "../../firebaseConfig"
+import { getDatabase, ref, set } from "firebase/database";
+import { Box, Modal } from "@mui/material";
 
-function Create() {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    price: "",
-    cost: "",
-    stock: "",
-    options: [{ size: "", price: "", cost: "", stock: "" }],
-  });
-  const [enableOptions, setEnableOption] = useState(false);
+function ModalComponent({showModal, setShowModal, item}) {
+  const [formData, setFormData] = useState({...item});
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    let filteredData = {};
-
-    if (enableOptions) {
-      filteredData = {
-        name: formData.name,
-        options: formData.options,
-      };
-    } else {
-      filteredData = {
-        name: formData.name,
-        category: formData.category,
-        price: formData.price,
-        cost: formData.cost,
-        stock: formData.stock,
-      };
-    }
+    // TODO: 
     const db = getDatabase(app);
-    const newDocRef = push(ref(db, "menu"));
-    set(newDocRef, filteredData)
-      .then(() => {
-        alert("data saved successfully");
-        navigate("/")
-      })
-      .catch((error) => {
-        alert("error: ", error.message);
-      });
+    const dbRef = ref(db, "menu/" + item.id);
+    set(dbRef, {
+        ...formData
+    }).then(() => {
+        alert("Updated")
+        setShowModal(false)
+    }).catch((error) => {
+        alert(error.message)
+    })
+    window.location.reload();
 
-    setFormData({
-      category: "",
-      name: "",
-      price: "",
-      cost: "",
-      stock: "",
-      options: [{ size: "", price: "", cost: "", stock: "" }],
-    });
-    setEnableOption(false);
   };
 
   const handleChange = (event) => {
@@ -86,13 +51,20 @@ function Create() {
     setFormData({ ...formData, options: newOptions });
   };
 
-  const handleOptions = (event) => {
-    setEnableOption(event.target.checked);
-  };
 
+  const handleClose = () => {
+    setShowModal(false)
+  }
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <Modal
+        open={showModal}
+        onClose={handleClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box px={{background: "white", height: "50%", width: "50%", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", overflowY: "auto" }}>
+        <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="category">Category:</label>
           <input
@@ -115,7 +87,7 @@ function Create() {
             required
           />
         </div>
-        {enableOptions === false ? (
+        {!!!formData?.options ? (
           <div>
             <div>
               <label htmlFor="price">Price ($):</label>
@@ -152,20 +124,10 @@ function Create() {
             </div>
           </div>
         ) : null}
-
-        <div style={{display: "flex"}}>
-          <label>Enable Options:</label>
-          <input
-            style={{width: "10%"}}
-            type="checkbox"
-            checked={enableOptions}
-            onChange={handleOptions}
-          />
-        </div>
-        {enableOptions && (
+        {!!formData.options && (
           <div>
             <label>Options:</label>
-            {formData.options.map((option, index) => (
+            {formData.options?.map((option, index) => (
               <div key={index}>
                 <input
                   type="text"
@@ -209,10 +171,12 @@ function Create() {
             </button>
           </div>
         )}
-        <button type="submit">Add Item</button>
+        <button type="submit">Update Item</button>
       </form>
+        </Box>
+      </Modal>
     </div>
   );
 }
 
-export default Create;
+export default ModalComponent;
