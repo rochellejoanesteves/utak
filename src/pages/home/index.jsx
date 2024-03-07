@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import app from "../../firebaseConfig";
-import { getDatabase, ref, get, set, push } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 import MenuItem from "../../components/menuItem";
 import "./home.scss";
 
